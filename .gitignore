@@ -1,21 +1,6 @@
 .env
-# Created by https://www.toptal.com/developers/gitignore/api/python,node,windows,git
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,node,windows,git
-
-### Git ###
-# Created by git for backups. To disable backups in Git:
-# $ git config --global mergetool.keepBackup false
-*.orig
-
-# Created by git when using merge tools for conflicts
-*.BACKUP.*
-*.BASE.*
-*.LOCAL.*
-*.REMOTE.*
-*_BACKUP_*.txt
-*_BASE_*.txt
-*_LOCAL_*.txt
-*_REMOTE_*.txt
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,python,node
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,windows,python,node
 
 ### Node ###
 # Logs
@@ -323,6 +308,25 @@ poetry.toml
 # ruff
 .ruff_cache/
 
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -349,4 +353,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/python,node,windows,git
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,python,node
