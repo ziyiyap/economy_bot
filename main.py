@@ -1,6 +1,7 @@
 import discord
 import os
 import sys
+from discord.ui import Select, View
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,6 +15,28 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="/help"))
 
 testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
+
+@bot.slash_command(guild_ids=testservers, name="help", description="Shows all the commands of the bot")
+async def help(ctx):
+    select = Select(placeholder = "Choose an option.", options=[
+        discord.SelectOption(label="Fun", emoji="🤪", description="Shows all the commands in the Fun section"),
+        discord.SelectOption(label="Music", emoji="🎵", description="Shows all the commands in the Music section"),
+        discord.SelectOption(label="Economy", emoji="💰", description="Shows all the commands in the Economy section"),
+        discord.SelectOption(label="Moderation", emoji="🛡️", description="Shows all the commands in the Moderation section"),
+    ])
+    async def my_callback(interaction):
+        if select.values[0] == "Fun":
+            await interaction.response.send_message("https://tenor.com/view/clash-royale-gif-5535732")
+        elif select.values[0] == "Music":
+            await interaction.response.send_message("https://tenor.com/view/clash-royale-clashroyale-angry-gif-5302587")
+        elif select.values[0] == "Economy":
+            await interaction.response.send_message("https://tenor.com/view/thumbs-up-youre-awesome-good-job-gif-7939553")
+        elif select.values[0] == "Moderation":
+            await interaction.response.send_message("https://tenor.com/view/clash-royale-cry-tears-king-crown-gif-5302586")
+    select.callback = my_callback
+    view = View()
+    view.add_item(select)
+    await ctx.respond("Help command", view=view, ephemeral=True)
 
 @bot.slash_command(guild_ids=testservers, name='ping', description='Checks the bot latency')
 async def ping(ctx):
