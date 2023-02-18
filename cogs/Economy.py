@@ -1,6 +1,4 @@
 import discord  
-import os
-import praw
 import random
 
 testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
