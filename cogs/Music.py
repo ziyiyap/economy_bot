@@ -4,7 +4,7 @@ import wavelink
 import datetime
 import asyncio
 
-testservers = [1066309324604977182, 701770264752422926]
+testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
 
 class Music(discord.Cog):
 
@@ -101,7 +101,7 @@ class Music(discord.Cog):
         else:
             self.queue.append(search)
 
-            embed = discord.Embed(title=f"Added {search} to the queue", color=discord.Colour.green())
+            embed = discord.Embed(title=f"Added `{search}` to the queue", color=discord.Colour.green())
             await ctx.respond(embed=embed) 
             
         vc.ctx = ctx

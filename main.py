@@ -13,7 +13,7 @@ async def on_ready():
     print('Bot is ready.')
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="/help"))
 
-testservers = [1066309324604977182, 701770264752422926]
+testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
 
 @bot.slash_command(guild_ids=testservers, name='ping', description='Checks the bot latency')
 async def ping(ctx):
