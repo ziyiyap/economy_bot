@@ -18,4 +18,16 @@ async def ping(ctx):
     embed = discord.Embed(title="Pong! 🏓", description=f"Latency is `{round(bot.latency*1000)}ms`",color=discord.Colour.random())
     await ctx.respond(embed=embed, ephemeral=True)
 
+@bot.slash_command(guild_ids=testservers, name='load', description='Loads the selected cogs')
+async def load(ctx, extension):
+    bot.load_extension(f"cogs.{extension}")
+
+@bot.slash_command(guild_ids=testservers, name='unload', description='Unloads the selected cogs')
+async def unload(ctx, extension):
+    bot.unload_extension(f"cogs.{extension}")
+
+for filename in os.listdir("economy_bot\cogs"):
+    if filename.endswith(".py"):
+        bot.load_extension(f"cogs.{filename[:-3]}")  
+
 bot.run(os.environ['token'])
