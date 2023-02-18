@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
+token = os.getenv('TOKEN') 
 
 @bot.event
 async def on_ready():
@@ -31,4 +32,4 @@ for filename in os.listdir("economy_bot\cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")  
 
-bot.run(os.environ['token'])
+bot.run(token)
