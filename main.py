@@ -14,9 +14,7 @@ async def on_ready():
     print('Bot is ready.')
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="/help"))
 
-testservers = [1066309324604977182]
-
-@bot.slash_command(guild_ids=testservers, name="help", description="Shows all the commands of the bot")
+@bot.slash_command(name="help", description="Shows all the commands of the bot")
 async def help(ctx):
     select = Select(placeholder = "Choose an option.", options=[
         discord.SelectOption(label="Fun", emoji="🤪", description="Shows all the commands in the Fun section"),
@@ -37,19 +35,39 @@ async def help(ctx):
     view = View()
     view.add_item(select)
     await ctx.respond("Help command", view=view, ephemeral=True)
+    command_payload = {
+    "name": "help",
+    "description": "Shows all the commands of the bot"
+}
+    await bot.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-@bot.slash_command(guild_ids=testservers, name='ping', description='Checks the bot latency')
+@bot.slash_command(name='ping', description='Checks the bot latency')
 async def ping(ctx):
     embed = discord.Embed(title="Pong! 🏓", description=f"Latency is `{round(bot.latency*1000)}ms`",color=discord.Colour.random())
     await ctx.respond(embed=embed, ephemeral=True)
+    command_payload = {
+    "name": "ping",
+    "description": "Checks the bot latency"
+}
+    await bot.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-@bot.slash_command(guild_ids=testservers, name='load', description='Loads the selected cogs')
+@bot.slash_command(name='load', description='Loads the selected cogs')
 async def load(ctx, extension):
     bot.load_extension(f"cogs.{extension}")
+    command_payload = {
+    "name": "load",
+    "description": "Loads the selected cogs"
+}
+    await bot.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-@bot.slash_command(guild_ids=testservers, name='unload', description='Unloads the selected cogs')
+@bot.slash_command(name='unload', description='Unloads the selected cogs')
 async def unload(ctx, extension):
     bot.unload_extension(f"cogs.{extension}")
+    command_payload = {
+    "name": "unload",
+    "description": "Unloads the selected cogs"
+}
+    await bot.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
 for filename in os.listdir("economy_bot\cogs"):
     if filename.endswith(".py"):

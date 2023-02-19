@@ -4,8 +4,6 @@ import wavelink
 import datetime
 import asyncio
 
-testservers = [1066309324604977182]
-
 class Music(discord.Cog):
 
     def __init__(self, bot):
@@ -49,7 +47,7 @@ class Music(discord.Cog):
             print(reason)
 
 
-    @discord.slash_command(guild_ids=testservers, name='join', description="Joins the channel you're in")
+    @discord.slash_command(name='join', description="Joins the channel you're in")
     async def join(self, ctx, channel: typing.Optional[discord.VoiceChannel]):
         if channel is None:
             channel = ctx.author.voice.channel
@@ -64,8 +62,13 @@ class Music(discord.Cog):
         await channel.connect(cls=wavelink.Player)
         embed = discord.Embed(title=f"Connected to `#{channel.name}`.", color=discord.Colour.brand_green()) 
         await ctx.respond(embed=embed)
+        command_payload = {
+        "name": "join",
+        "description": "Joins the channel you're in"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-    @discord.slash_command(guild_ids=testservers, name='disconnect', description="Leaves the channel you're in")
+    @discord.slash_command(name='disconnect', description="Leaves the channel you're in")
     async def disconnect(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -77,8 +80,13 @@ class Music(discord.Cog):
         await player.disconnect()
         embed = discord.Embed(title=f"Disconnected.", color=discord.Colour.red()) 
         await ctx.respond(embed=embed)
+        command_payload = {
+        "name": "disconnect",
+        "description": "Leaves the channel you're in"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-    @discord.slash_command(guild_ids=testservers, name='play', description="Play's a song")
+    @discord.slash_command(name='play', description="Plays a song")
     async def play(self, ctx, *, search: str):
         try:
             search = await wavelink.YouTubeTrack.search(query=search, return_first=True)
@@ -106,12 +114,22 @@ class Music(discord.Cog):
             
         vc.ctx = ctx
         setattr(vc, " loop", False)
+        command_payload = {
+        "name": "play",
+        "description": "Plays a song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
 
-    @discord.slash_command(guild_ids=testservers, name='stop', description="Stops a song")
+    @discord.slash_command(name='stop', description="Stops a song")
     async def stop(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
+        command_payload = {
+        "name": "stop",
+        "description": "Stops a song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
         if player is None:
             if player.is_connected():
@@ -124,11 +142,17 @@ class Music(discord.Cog):
             return await ctx.respond(embed=embed)
         else:
             return await ctx.respond('Nothing is playing!')
+        
 
-    @discord.slash_command(guild_ids=testservers, name='pause', description="Pauses a song")
+    @discord.slash_command(name='pause', description="Pauses a song")
     async def pause(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
+        command_payload = {
+        "name": "pause",
+        "description": "Pauses a song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
         if player is None:
             return await ctx.respond("I am not connected to any voice channel.")
@@ -143,7 +167,7 @@ class Music(discord.Cog):
         else:
             return await ctx.respond('Playback is already paused.')
         
-    @discord.slash_command(guild_ids=testservers, name='resume', description='Resumes a song')
+    @discord.slash_command(name='resume', description='Resumes a song')
     async def resume(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -158,8 +182,13 @@ class Music(discord.Cog):
         else:
             if not len(self.queue) == 0:
                 return await ctx.respond('Playback is not paused.')
+        command_payload = {
+        "name": "resume",
+        "description": "Resumes a song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-    @discord.slash_command(guild_ids=testservers, name='volume', description='Changes the volume of the song')
+    @discord.slash_command(name='volume', description='Changes the volume of the song')
     async def volume(self, ctx, to: int):
         if to > 100:
             return await ctx.respond('Volume should be between 0 and 100')
@@ -173,11 +202,21 @@ class Music(discord.Cog):
         await player.set_volume(to)
         embed = discord.Embed(title=f'Changed volume to {to}', color=discord.Colour.yellow())
         await ctx.respond(embed=embed)
+        command_payload = {
+        "name": "volume",
+        "description": "Changes the volume of the song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-    @discord.slash_command(guild_ids=testservers, name='loop', description='Loops the song')
+    @discord.slash_command(name='loop', description='Loops the song')
     async def loop(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
+        command_payload = {
+        "name": "loop",
+        "description": "Loops the song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
         if player is None:
             return await ctx.respond("I am not connected to any voice channel.")
         else:
@@ -194,7 +233,7 @@ class Music(discord.Cog):
             unloopembed = discord.Embed(title="Loop is now disabled", color=discord.Colour.red())
             return await ctx.respond(embed=unloopembed)
 
-    @discord.slash_command(guild_ids=testservers, name="queue", description="Show's the queue")
+    @discord.slash_command(name="queue", description="Shows the queue")
     async def queue(self, ctx, search=None):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -230,11 +269,21 @@ class Music(discord.Cog):
                 self.queue.append(track)
             
             await ctx.respond(embed=discord.Embed(title=f"Added {track.title} to the queue", color=discord.Color.green()))
+        command_payload = {
+        "name": "queue",
+        "description": "Shows the queue"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
-    @discord.slash_command(guild_ids=testservers, name="nowplaying", description="Show's the song that is currently playing")
+    @discord.slash_command(name="nowplaying", description="Shows the song that is currently playing")
     async def nowplaying(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
+        command_payload = {
+        "name": "nowplaying",
+        "description": "Shows the song that is currently playing"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
         if player is None:
             return await ctx.respond("I am not connected to any voice channel.")
@@ -246,7 +295,7 @@ class Music(discord.Cog):
         embed.add_field(name="Extra info", value=f"Song URL: [Click Me]({str(vc.track.uri)})")
         return await ctx.respond(embed=embed)
 
-    @discord.slash_command(guild_ids=testservers, name="skip", description="Skips the current song")
+    @discord.slash_command(name="skip", description="Skips the current song")
     async def skip(self, ctx):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -261,6 +310,11 @@ class Music(discord.Cog):
             await ctx.respond(embed=discord.Embed(title=f"Skipped to `{next_track.title}`", color=discord.Color.green()))
         else:
             await ctx.respond("The queue is empty")
+        command_payload = {
+        "name": "skip",
+        "description": "Skips the current song"
+        }
+        await self.http.request(discord.Route("PUT",'/applications/1076536828422782987/commands'), json=command_payload)
 
 def setup(bot):
     bot.add_cog(Music(bot)) 
