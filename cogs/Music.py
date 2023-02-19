@@ -1,8 +1,12 @@
 import discord
+import os
 import typing
 import wavelink
 import datetime
 import asyncio
+import requests
+import json
+
 
 class Music(discord.Cog):
 
@@ -12,6 +16,7 @@ class Music(discord.Cog):
         self.position = 0
         self.repeat = False
         self.repeatMode = "NONE"
+        self.http = None
         self.playingTextChannel = 0
         bot.loop.create_task(self.create_nodes())
 
@@ -21,6 +26,14 @@ class Music(discord.Cog):
 
     async def on_wavelink_node_ready(self, node: wavelink.Node):
         print(f"Node {node.identifier} is ready.")
+
+    async def setup(self):
+        self.http = await self.bot.http.static_login(os.getenv('TOKEN'))  # set http to the HTTP client instance
+
+    @discord.Cog.listener()
+    async def on_ready(self):
+        await self.setup()
+        print("Music is ready.")
 
     @discord.Cog.listener()
     async def on_wavelink_track_start(self, player:wavelink.Player, track):
@@ -114,6 +127,7 @@ class Music(discord.Cog):
             
         vc.ctx = ctx
         setattr(vc, " loop", False)
+
         command_payload = {
         "name": "play",
         "description": "Plays a song"
