@@ -3,7 +3,7 @@ import os
 import random
 import aiohttp
 
-testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
+testservers = [1066309324604977182]
 
 class ChatGPT(discord.Cog):
 

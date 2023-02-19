@@ -3,7 +3,7 @@ import os
 import praw
 import random
 
-testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
+testservers = [1066309324604977182]
 
 reddit = praw.Reddit(client_id = "R-VC2Ng-g4enqyWQJf78pA",
                      client_secret = os.environ['reddit_secret'],

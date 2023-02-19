@@ -4,7 +4,7 @@ import wavelink
 import datetime
 import asyncio
 
-testservers = [1066309324604977182, 701770264752422926, 1070322431203487785]
+testservers = [1066309324604977182]
 
 class Music(discord.Cog):
 
