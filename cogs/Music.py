@@ -91,7 +91,7 @@ class Music(discord.Cog):
                 return await ctx.respond("I am not connected to any voice channel.")
 
         await player.disconnect()
-        embed = discord.Embed(title=f"Disconnected.", color=discord.Colour.red()) 
+        embed = discord.Embed(description=f"I have disconnected the channel.", color=discord.Colour.red()) 
         await ctx.respond(embed=embed)
         command_payload = {
         "name": "disconnect",
@@ -104,7 +104,7 @@ class Music(discord.Cog):
         try:
             search = await wavelink.YouTubeTrack.search(query=search, return_first=True)
         except:
-            return await ctx.respond(embed=discord.Embed(title="Something went wrong while searching for this track.", color=discord.Colour.red()))
+            return await ctx.respond(embed=discord.Embed(description="Something went wrong while searching for this track.", color=discord.Colour.red()))
 
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -115,15 +115,15 @@ class Music(discord.Cog):
         if not vc.is_playing() and vc.is_connected():
             try:
                 await vc.play(search)
-                embed = discord.Embed(title=f"Now Playing: `{search}`", color=discord.Colour.yellow())
-                await ctx.respond(embed=embed)
+                embed = discord.Embed(description=f"Now Playing: `{search}`", color=discord.Colour.yellow())
+                return await ctx.respond(embed=embed)
             except:
-                return await ctx.respond(embed=discord.Embed(title="Something went wrong while playing this track", color=discord.Colour.red()))
+                await ctx.respond(embed=discord.Embed(title="Something went wrong while playing this track", color=discord.Colour.red()))
         else:
             self.queue.append(search)
 
             embed = discord.Embed(title=f"Added `{search}` to the queue", color=discord.Colour.green())
-            await ctx.respond(embed=embed) 
+            return await ctx.respond(embed=embed) 
             
         vc.ctx = ctx
         setattr(vc, " loop", False)
@@ -147,7 +147,7 @@ class Music(discord.Cog):
 
         if player.is_playing:
             await player.stop()
-            embed = discord.Embed(title='Playback stopped', color=discord.Colour.red())
+            embed = discord.Embed(description='Playback stopped', color=discord.Colour.red())
             return await ctx.respond(embed=embed)
         else:
             await ctx.respond('Nothing is playing!')
@@ -169,7 +169,7 @@ class Music(discord.Cog):
         if not player.is_paused():
             if player.is_playing():
                 await player.pause()
-                embed = discord.Embed(title='Playback Paused', color=discord.Colour.orange())
+                embed = discord.Embed(description='Playback Paused', color=discord.Colour.orange())
                 return await ctx.respond(embed=embed)
             else:
                 return await ctx.respond('Nothing is playing!')
@@ -192,7 +192,7 @@ class Music(discord.Cog):
 
         if player.is_paused():
             await player.resume()
-            embed = discord.Embed(title='Playback resumed', color=discord.Colour.green())
+            embed = discord.Embed(description='Playback resumed', color=discord.Colour.green())
             return await ctx.respond(embed=embed)
         else:
             if not len(self.queue) == 0:
@@ -216,7 +216,7 @@ class Music(discord.Cog):
         player = node.get_player(ctx.guild)
 
         await player.set_volume(to)
-        embed = discord.Embed(title=f'Changed volume to {to}', color=discord.Colour.yellow())
+        embed = discord.Embed(description=f'Changed volume to {to}', color=discord.Colour.yellow())
         await ctx.respond(embed=embed)
         command_payload = {
         "name": "volume",
@@ -238,10 +238,10 @@ class Music(discord.Cog):
             setattr(vc, "loop", False)
 
         if vc.loop:
-            loopembed = discord.Embed(title="Loop is now enabled", color=discord.Colour.green())
+            loopembed = discord.Embed(description="Loop is now enabled", color=discord.Colour.green())
             return await ctx.respond(embed=loopembed)
         else:
-            unloopembed = discord.Embed(title="Loop is now disabled", color=discord.Colour.red())
+            unloopembed = discord.Embed(description="Loop is now disabled", color=discord.Colour.red())
             await ctx.respond(embed=unloopembed)
             
         command_payload = {
@@ -264,12 +264,12 @@ class Music(discord.Cog):
 
                 return await ctx.respond(embed=mbed)
             else:
-                return await ctx.respond(embed=discord.Embed(title="The queue is empty", color=discord.Color.red()))
+                return await ctx.respond(embed=discord.Embed(description="The queue is empty", color=discord.Color.red()))
         else:
             try:
                 track = await wavelink.YoutubeTrack.search(query=search, return_first=True)
             except:
-                return await ctx.respond(embed=discord.Embed(title="Something went wrong while searching for this track", color=discord.Color.red()))
+                return await ctx.respond(embed=discord.Embed(description="Something went wrong while searching for this track", color=discord.Color.red()))
             
             if not ctx.voice_client:
                 vc: wavelink.Player = await ctx.author.voice.channel(cls=wavelink.Player)
@@ -281,11 +281,11 @@ class Music(discord.Cog):
                 try:
                     await vc.play(track)
                 except:
-                    return await ctx.respond(embed=discord.Embed(title="Something went wrong while playing this track", color=discord.Color.red()))
+                    return await ctx.respond(embed=discord.Embed(description="Something went wrong while playing this track", color=discord.Color.red()))
             else:
                 self.queue.append(track)
             
-            await ctx.respond(embed=discord.Embed(title=f"Added {track.title} to the queue", color=discord.Color.green()))
+            await ctx.respond(embed=discord.Embed(description=f"Added {track.title} to the queue", color=discord.Color.green()))
         command_payload = {
         "name": "queue",
         "description": "Shows the queue"
@@ -321,9 +321,9 @@ class Music(discord.Cog):
             try:
                 await player.play(next_track)
             except:
-                return await ctx.respond(embed=discord.Embed(title="Something went wrong while playing this track", color=discord.Color.red()))
+                return await ctx.respond(embed=discord.Embed(description="Something went wrong while playing this track", color=discord.Color.red()))
 
-            await ctx.respond(embed=discord.Embed(title=f"Skipped to `{next_track.title}`", color=discord.Color.green()))
+            await ctx.respond(embed=discord.Embed(description=f"Skipped to `{next_track.title}`", color=discord.Color.green()))
         else:
             await ctx.respond("The queue is empty")
         command_payload = {
