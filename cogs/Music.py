@@ -115,7 +115,7 @@ class Music(discord.Cog):
         if not vc.is_playing() and vc.is_connected():
             try:
                 await vc.play(search)
-                embed = discord.Embed(description=f"Now Playing: `{search}`", color=discord.Colour.yellow())
+                embed = discord.Embed(description=f"Now Playing: **`{search}`**", color=discord.Colour.yellow())
                 return await ctx.respond(embed=embed)
             except:
                 await ctx.respond(embed=discord.Embed(title="Something went wrong while playing this track", color=discord.Colour.red()))
